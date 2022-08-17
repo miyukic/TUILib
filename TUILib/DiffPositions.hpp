@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <vector>
 #include <iostream>
@@ -27,7 +27,6 @@ namespace tuilib {
     enum class TextAttribute {
         Default = 0,
         Bold = 1,
-
     };
 
     struct DiffProperty {
@@ -38,7 +37,7 @@ namespace tuilib {
     };
 
     class MYKLIB_API DiffPositions {
-        std::map<uint16_t, std::vector<DiffProperty>> _data;
+        std::map<uint16_t, DiffProperty> _data;
     public:
         void clear() {
             _data.clear();
@@ -54,13 +53,8 @@ namespace tuilib {
         //変更点をpush
         void pushBack(uint16_t row, uint16_t cul, std::string charactor, std::vector<TextAttribute> attributes) {
             auto dp = DiffProperty{row, cul, charactor, attributes};
-            bool b = _data.contains(row);
             //auto [itr, b] = _data.try_emplace(row, std::move(dp));
-            if (b) {
-                _data[row].emplace_back(std::move(dp));
-            } else {
-                _data.emplace(row, std::move(dp));
-            }
+            _data.emplace(row, std::move(dp));
         }
 
         //行指定(
