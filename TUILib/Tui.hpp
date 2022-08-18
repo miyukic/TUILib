@@ -36,7 +36,6 @@
 #   endif
 #endif
 
-
 namespace tuilib {
 
     class MYKLIB_API Screen {
@@ -73,15 +72,15 @@ namespace tuilib {
             std::cout
             << "\033[" << dp.row << "d"
             << "\033[" << dp.cul << "G"
-            << dp.charactor << std::flush;
+            << dp.charactor;
         }
 
         //1行単位で書き換える。
-        void putDiff(uint16_t row, std::string& diff) {
+        void put1LineDiff(uint16_t row, const std::string& diff) {
             std::cout
-            << "\033[" << row << "d"
-            << "\033[1G"
-            << diff << std::flush;
+                << "\033[" << row << "d"
+                << "\033[1G"
+                << diff;
         }
 
         //差分を書き換える。
@@ -98,11 +97,17 @@ namespace tuilib {
             //}
             auto h = _hight;
             for (uint16_t i = 0; i < h; ++i) {
-                if (_diffs.isChanged(h + 1)) {
-                    putDiff(i + 1, _frameBuffer[i]);
+                if (_diffs.isChanged(static_cast<uint16_t>(i + 1))) {
+                    //std::cout << _frameBuffer[i] << std::endl;
+                    put1LineDiff(i + 1, refFrameBuffer(i + 1));
                 }
             }
         }
+
+        std::string& frameBufferAt(uint16_t row, uint16_t cul) {
+            return _frameBuffer.at(_hight * (row - 1) + (cul - 1));
+        }
+
 
     public:
         void printScreenBuffer() const {
@@ -151,6 +156,17 @@ namespace tuilib {
             return _frameBuffer.at(((row - 1) * _width) + cul - 1);
         }
 
+        //任意の行(row)の文字列を返す(読み取り専用)
+        std::string refFrameBuffer(uint16_t row) const noexcept(false) {
+            std::string ret;
+            auto h = _hight;
+            auto w = _width;
+            for (size_t i = 0; i < w; ++i) {
+                ret += _frameBuffer[((row - 1) * w) + i];
+            }
+            return ret;
+        }
+
 #ifdef TEST__
 #include <algorithm>
 #endif
@@ -177,6 +193,7 @@ namespace tuilib {
             } else {
                 diffOverWrite();
             }
+            std::cout << std::flush;
             _diffs.clear();
         }
     };

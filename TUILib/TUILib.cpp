@@ -5,9 +5,9 @@
 
 int32_t interval = 2000;
 tuilib::Screen scrn;
-uint16_t hight = 50;
-uint16_t width = 80;
-const std::string BLOCK = "━";
+uint16_t hight = 70;
+uint16_t width = 30;
+const std::string BLOCK = "■";
 
 volatile sig_atomic_t e_flag = 0;
 
@@ -22,15 +22,13 @@ void abortHandler(int signum) {
 
 void onTimer() {
     static int counter = 0;
-    //try {
-        for (auto i = 0; i < hight; ++i) {
-            for (auto j = 0; j < width; ++j) {
-                scrn.setCharactor(i + 1, j + 1, std::to_string(counter));
-            }
+    counter %= 10;
+    //scrn.setCharactor(5, 5, std::to_string(counter));
+    for (auto i = 0; i < hight; ++i) {
+        for (auto j = 0; j < width; ++j) {
+            scrn.setCharactor(i + 1, j + 1, std::to_string(counter));
         }
-    //} catch (const std::exception& ex) {
-    //    std::cerr << ex.what() << std::endl;
-    //}
+    }
     scrn.reflectScreen();
     ++counter;
 }
@@ -44,7 +42,6 @@ int main() {
     scrn.createFrameBuffer(hight, width);
     scrn.clearBuffer(BLOCK);
     scrn.cursor = false;
-    //scrn.setCharactor("ほ", 3, 3);
     scrn.reflectScreen();
     while (true) {
         onTimer();
