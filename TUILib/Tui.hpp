@@ -38,19 +38,19 @@
 
 namespace tuilib {
 
+    template<class T>
     class MYKLIB_API Screen {
         bool _doReflesh = true; //画面再描画フラグ
         uint16_t _hight = 1;
         uint16_t _width = 1;
-        std::vector<std::string> _frameBuffer;
-        std::vector<std::string> _preFrameBuffer;
-        DiffPositions _diffs;
+        std::vector<T> _frameBuffer;
+        std::vector<T> _preFrameBuffer;
+        DiffPositions<T> _diffs;
     public:
         bool cursor = true;
     private:
         void refleshScreen() {
             std::cout << "\033[?1049h" << "\033[1d" << "\033[1G" << std::flush;
-            //std::system("cls");
             auto h = _hight;
             auto w = _width;
             for (decltype(h) i = 0; i < h; ++i) {
@@ -63,12 +63,12 @@ namespace tuilib {
             this->_preFrameBuffer = _frameBuffer;
         }
 
-        DiffPositions& getDiffPositions() {
+        DiffPositions<T>& getDiffPositions() {
             return _diffs;
         }
 
         //位置(row,cul)を指定して任意文字(charactor)で書き換える。
-        void putc(const DiffProperty& dp) {
+        void putc(const DiffProperty<T>& dp) {
             std::cout
             << "\033[" << dp.row << "d"
             << "\033[" << dp.cul << "G"
@@ -76,7 +76,7 @@ namespace tuilib {
         }
 
         //1行単位で書き換える。
-        void put1LineDiff(uint16_t row, const std::string& diff) {
+        void put1LineDiff(uint16_t row, const T& diff) {
             std::cout
                 << "\033[" << row << "d"
                 << "\033[1G"
@@ -104,7 +104,7 @@ namespace tuilib {
             }
         }
 
-        std::string& frameBufferAt(uint16_t row, uint16_t cul) {
+        T& frameBufferAt(uint16_t row, uint16_t cul) {
             return _frameBuffer.at(_hight * (row - 1) + (cul - 1));
         }
 
@@ -137,7 +137,7 @@ namespace tuilib {
         //任意の位置(row, cul)に任意の字(charactor)を配置, textattrに文字色等の設定を配列(vector)で渡す
         void setCharactor(
                 uint16_t row, uint16_t cul,
-                const std::string& charactor,
+                const T& charactor,
                 const std::vector<TextAttribute>& txtattr = {} 
                 ) noexcept(false) {
             //std::cout << _frameBuffer.size() << std::endl;
@@ -150,15 +150,15 @@ namespace tuilib {
         };
 
         //任意の位置(row, cul)の文字を返す(読み取り専用)
-        const std::string& refFrameBuffer(
+        const T& refFrameBuffer(
                 uint16_t row, uint16_t cul) const noexcept(false) {
             //std::cout << "debug row=" << row << " cul=" << cul  << " " << _frameBuffer[((row - 1) * _width) + cul - 1] << std::endl; 
             return _frameBuffer.at(((row - 1) * _width) + cul - 1);
         }
 
         //任意の行(row)の文字列を返す(読み取り専用)
-        std::string refFrameBuffer(uint16_t row) const noexcept(false) {
-            std::string ret;
+        T refFrameBuffer(uint16_t row) const noexcept(false) {
+            T ret;
             auto h = _hight;
             auto w = _width;
             for (size_t i = 0; i < w; ++i) {
@@ -171,12 +171,12 @@ namespace tuilib {
 #include <algorithm>
 #endif
         // 空白文字で埋める
-        void clearBuffer(std::string blank = " ") {
+        void clearBuffer(T blank = " ") {
 #ifdef TEST__
             std::fill(frameBuffer.begin(), frameBuffer.end(), blank);
 #else
             //std::fill(_frameBuffer.begin(), _frameBuffer.end(), blank);
-            _frameBuffer = std::vector<std::string>(_hight * _width, blank);
+            _frameBuffer = std::vector<T>(_hight * _width, blank);
 #endif
         }
 

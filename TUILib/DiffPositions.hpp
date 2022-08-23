@@ -30,15 +30,17 @@ namespace tuilib {
         Bold = 1,
     };
 
+    template<typename T>
     struct DiffProperty {
         uint16_t row;
         uint16_t cul;
-        std::string charactor;
+        T charactor;
         std::vector<TextAttribute> textAttr;
     };
 
+    template<typename T>
     class MYKLIB_API DiffPositions {
-        std::map<uint16_t, DiffProperty> _data;
+        std::map<uint16_t, DiffProperty<T>> _data;
     public:
         void clear() {
             _data.clear();
@@ -52,15 +54,15 @@ namespace tuilib {
         }
 
         //変更点をpush
-        void pushBack(uint16_t row, uint16_t cul, std::string charactor, std::vector<TextAttribute> attributes) {
-            auto dp = DiffProperty{row, cul, charactor, attributes};
+        void pushBack(uint16_t row, uint16_t cul, T charactor, std::vector<TextAttribute> attributes) {
+            auto dp = DiffProperty<T>{row, cul, charactor, attributes};
             //auto [itr, b] = _data.try_emplace(row, std::move(dp));
             _data.emplace(row, std::move(dp));
         }
 
         //行指定(
-        //std::optional<std::string> popLineBy(uint16_t row) {
-        //    std::string rowString;
+        //std::optional<T> popLineBy(uint16_t row) {
+        //    T rowString;
         //    if(!_data.contains(row)) return std::nullopt;
         //    auto d = _data[row];
         //    size_t s = d.size();
@@ -77,7 +79,7 @@ namespace tuilib {
 
 
         // 下の行から変更点をpop
-        std::optional<DiffProperty> pop() {
+        std::optional<DiffProperty<T>> pop() {
             if (_data.empty()) {
                 return std::nullopt;
             } else {

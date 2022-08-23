@@ -1,13 +1,13 @@
-﻿// TUILib.cpp : アプリケーションのエントリ ポイントを定義します。
+// TUILib.cpp : アプリケーションのエントリ ポイントを定義します。
 //
 
 #include "TUILib.h"
 
 int32_t interval = 2000;
-tuilib::Screen scrn;
-uint16_t hight = 70;
-uint16_t width = 30;
-const std::string BLOCK = "■";
+tuilib::Screen<std::string> scrn;
+uint16_t hight = 6;
+uint16_t width = 6;
+const std::string BLOCK = "あ";
 
 volatile sig_atomic_t e_flag = 0;
 
@@ -33,19 +33,32 @@ void onTimer() {
     ++counter;
 }
 
+//https://docs.microsoft.com/ja-jp/windows/win32/intl/code-page-identifiers?redirectedfrom=MSDN
+// SHIFT_JISのコードポイント
+constexpr int CP_SHIFT_JIS = 932;
+
 int main() {
+#ifdef _WIN32
+    //setvbuf(stdout, nullptr, _IOFBF, 1024);
+    SetConsoleOutputCP(CP_UTF8);
+#endif
     if (signal(SIGINT, abortHandler) == SIG_ERR) {
         exit(1);
     }
+    //std::system("chcp 932");
     using namespace tuilib;
+    std::cout << "あ" << std::endl;
+    //std::system("chcp");
+
+
     //std::system("cls");
-    scrn.createFrameBuffer(hight, width);
-    scrn.clearBuffer(BLOCK);
-    scrn.cursor = false;
-    scrn.reflectScreen();
-    while (true) {
-        onTimer();
-        std::this_thread::sleep_for(std::chrono::milliseconds(interval));
-    }
+    //scrn.createFrameBuffer(hight, width);
+    //scrn.clearBuffer(BLOCK);
+    //scrn.cursor = false;
+    //scrn.reflectScreen();
+    //while (true) {
+    //    onTimer();
+    //    std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+    //}
     return 0;
 }
