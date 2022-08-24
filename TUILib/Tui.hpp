@@ -172,12 +172,9 @@ namespace tuilib {
 #endif
         // 空白文字で埋める
         void clearBuffer(T blank = " ") {
-#ifdef TEST__
-            std::fill(frameBuffer.begin(), frameBuffer.end(), blank);
-#else
             //std::fill(_frameBuffer.begin(), _frameBuffer.end(), blank);
             _frameBuffer = std::vector<T>(_hight * _width, blank);
-#endif
+            _doReflesh = true;
         }
 
         //フレームバッファの内容をコンソールに反映
