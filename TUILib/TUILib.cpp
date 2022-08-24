@@ -6,8 +6,8 @@
 int32_t interval = 2000;
 tuilib::Screen<std::string> scrn;
 uint16_t hight = 6;
-uint16_t width = 6;
-const std::string BLOCK = "あ";
+uint16_t width = 12;
+const std::string BLOCK = "|";
 
 volatile sig_atomic_t e_flag = 0;
 
@@ -23,7 +23,7 @@ void abortHandler(int signum) {
 void onTimer() {
     static int counter = 0;
     counter %= 10;
-    //scrn.setCharactor(5, 5, std::to_string(counter));
+    scrn.clearBuffer(std::to_string(counter));
     for (auto i = 0; i < hight; ++i) {
         for (auto j = 0; j < width; ++j) {
             scrn.setCharactor(i + 1, j + 1, std::to_string(counter));
@@ -42,23 +42,20 @@ int main() {
     //setvbuf(stdout, nullptr, _IOFBF, 1024);
     SetConsoleOutputCP(CP_UTF8);
 #endif
+    
     if (signal(SIGINT, abortHandler) == SIG_ERR) {
         exit(1);
     }
-    //std::system("chcp 932");
     using namespace tuilib;
-    std::cout << "あ" << std::endl;
-    //std::system("chcp");
 
-
-    //std::system("cls");
-    //scrn.createFrameBuffer(hight, width);
-    //scrn.clearBuffer(BLOCK);
-    //scrn.cursor = false;
-    //scrn.reflectScreen();
-    //while (true) {
-    //    onTimer();
-    //    std::this_thread::sleep_for(std::chrono::milliseconds(interval));
-    //}
+    std::system("cls");
+    scrn.createFrameBuffer(hight, width);
+    scrn.clearBuffer(BLOCK);
+    scrn.cursor = false;
+    scrn.reflectScreen();
+    while (true) {
+        onTimer();
+        std::this_thread::sleep_for(std::chrono::milliseconds(interval));
+    }
     return 0;
 }

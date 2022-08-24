@@ -55,7 +55,6 @@ namespace tuilib {
             auto w = _width;
             for (decltype(h) i = 0; i < h; ++i) {
                 for (decltype(w) j = 0; j < w; ++j) {
-//std::cout << "j=" << j << " i=" << i << std::endl;
                     std::cout << refFrameBuffer(i + 1, j + 1);
                 }
                 std::cout << std::endl;
@@ -85,20 +84,9 @@ namespace tuilib {
 
         //差分を書き換える。
         void diffOverWrite() {
-            //while(true) {
-            //    std::optional<DiffProperty> maybe 
-            //        = getDiffPositions().pop();
-            //    if (maybe) {
-            //        auto diffproperty{maybe.value()};
-            //        putc(diffproperty);
-            //    } else {
-            //        break;
-            //    }
-            //}
             auto h = _hight;
             for (uint16_t i = 0; i < h; ++i) {
                 if (_diffs.isChanged(static_cast<uint16_t>(i + 1))) {
-                    //std::cout << _frameBuffer[i] << std::endl;
                     put1LineDiff(i + 1, refFrameBuffer(i + 1));
                 }
             }
@@ -172,7 +160,6 @@ namespace tuilib {
 #endif
         // 空白文字で埋める
         void clearBuffer(T blank = " ") {
-            //std::fill(_frameBuffer.begin(), _frameBuffer.end(), blank);
             _frameBuffer = std::vector<T>(_hight * _width, blank);
             _doReflesh = true;
         }

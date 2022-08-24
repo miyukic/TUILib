@@ -25,10 +25,8 @@
 
 namespace tuilib {
 
-    enum class TextAttribute {
-        Default = 0,
-        Bold = 1,
-    };
+
+    enum class TextAttribute;
 
     template<typename T>
     struct DiffProperty {
@@ -48,7 +46,6 @@ namespace tuilib {
 
         //デストラクタ
         ~DiffPositions() {
-            //std::cout << "~DiffPositions" << std::endl;
             //裏スクリーンバッファを元に戻す
             std::cout << "\033[?1049l" << std::flush;
         }
@@ -59,36 +56,11 @@ namespace tuilib {
             //auto [itr, b] = _data.try_emplace(row, std::move(dp));
             _data.emplace(row, std::move(dp));
         }
-
-        //行指定(
-        //std::optional<T> popLineBy(uint16_t row) {
-        //    T rowString;
-        //    if(!_data.contains(row)) return std::nullopt;
-        //    auto d = _data[row];
-        //    size_t s = d.size();
-        //    for (size_t i = 0; i < s; ++i) {
-        //        rowString += d[i].charactor;
-        //    }
-        //    return rowString;
-        //}
         
         //指定行が変更されたか(row)
         bool isChanged(uint16_t row) {
             return _data.contains(row);
         }
 
-
-        // 下の行から変更点をpop
-        std::optional<DiffProperty<T>> pop() {
-            if (_data.empty()) {
-                return std::nullopt;
-            } else {
-                //std::optional<DiffProperty> data
-                //    = _data.back();
-                //_data.pop_back();
-                //return data;
-            }
-                return std::nullopt; //仮
-        }
     };
 }
