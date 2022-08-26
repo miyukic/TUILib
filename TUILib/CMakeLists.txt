@@ -5,7 +5,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 # ソースをこのプロジェクトの実行可能ファイルに追加します。
-add_executable (TUILib "TUILib.cpp" "TUILib.h" "Tui.cpp" "Tui.hpp" "DiffPositions.hpp")
+add_executable (TUILib "TUILib.cpp" "Tui.cpp")
 #target_compile_options("utf-8")
 
 #add_compile_options("$<$<C_COMPILER_ID:MSVC>:/source-charset:utf-8>")
