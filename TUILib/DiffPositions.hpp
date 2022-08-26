@@ -26,10 +26,10 @@
 namespace tuilib {
 
 
-    enum class TextAttribute;
+    enum class MYKLIB_API TextAttribute;
 
     template<typename T>
-    struct DiffProperty {
+    struct MYKLIB_API DiffProperty {
         uint16_t row;
         uint16_t cul;
         T charactor;

@@ -12,5 +12,6 @@
 #include <exception>
 #include <stdexcept>
 #include <signal.h>
+#include <string>
 
 // TODO: プログラムに必要な追加ヘッダーをここで参照します。
