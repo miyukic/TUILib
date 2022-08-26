@@ -1,6 +1,8 @@
 ﻿#pragma once
+#include "DiffPositions.hpp"
+#include "TextAttribute.hpp"
+
 #include <cstddef>
-//#include <errhandlingapi.h>
 #include <iostream>
 #include <cstdint>
 #include <stdint.h>
@@ -11,8 +13,6 @@
 #include <optional>
 #include <algorithm>
 #include <cstdlib>
-
-#include "DiffPositions.hpp"
 
 #ifdef _WIN32
 #   include <Windows.h>
@@ -92,6 +92,7 @@ namespace tuilib {
             }
         }
 
+        //現在のフレームバッファの任意の位置の文字を返す
         T& frameBufferAt(uint16_t row, uint16_t cul) {
             return _frameBuffer.at(_hight * (row - 1) + (cul - 1));
         }
@@ -132,10 +133,6 @@ namespace tuilib {
             _frameBuffer.at(((row - 1) * _width) + cul - 1) = charactor;
             _diffs.pushBack(row, cul, charactor, txtattr);
         }
-
-        struct Propaty {
-
-        };
 
         //任意の位置(row, cul)の文字を返す(読み取り専用)
         const T& refFrameBuffer(

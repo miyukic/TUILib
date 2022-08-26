@@ -1,39 +1,23 @@
 ﻿#pragma once
 
+#include "TextAttribute.hpp"
+#include "Dll.hpp"
+
 #include <vector>
 #include <iostream>
 #include <cstdint>
 #include <optional>
 #include <map>
 
-#ifdef MYKLIBL_EXPORTS
-#   ifdef _WINDLL
-#       define MYKLIB_API __declspec(dllexport)
-#   elif __linux__
-#       define MYKLIB_API 
-#   endif
-#else
-#   ifdef _WINDLL
-#       define MYKLIB_API __declspec(dllimport)
-#   elif __linux__
-#       define MYKLIB_API
-#   else //何も指定しない
-#       define MYKLIB_API 
-#       define MYKLIB_API 
-#   endif
-#endif
 
 namespace tuilib {
 
-
-    enum class MYKLIB_API TextAttribute;
-
     template<typename T>
     struct MYKLIB_API DiffProperty {
-        uint16_t row;
-        uint16_t cul;
-        T charactor;
-        std::vector<TextAttribute> textAttr;
+        uint16_t row;               // 行
+        uint16_t cul;               // 列
+        T charactor;                // 文字
+        std::vector<TextAttribute> textAttr; // テキストの付加属性
     };
 
     template<typename T>

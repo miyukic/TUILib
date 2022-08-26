@@ -3,8 +3,9 @@
 
 #pragma once
 
-#include <iostream>
 #include "Tui.hpp"
+
+#include <iostream>
 #include <stdint.h>
 #include <thread>
 #include <chrono>
